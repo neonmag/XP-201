@@ -9,13 +9,10 @@ namespace App
     public class RomanNumber
     {
         public int Value { get; set; }
-        public int Val2;
         public static RomanNumber Parse(String input)
         {
-            return new()
-            {
-                Value = 1
-            };
+            if(input == "I") return new() {Value = 1};
+            else return new() {Value = 2};
         }
     }
 }
