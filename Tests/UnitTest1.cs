@@ -16,7 +16,13 @@ namespace Tests
                 { 3, "III" },
                 { 4, "IV" },
                 { 5, "V" },
-                { 10, "X" },
+                { 51, "LI" },
+                { 52, "LII" },
+                { 105, "CV" },
+                { 115, "CXV" },
+                { 107, "CVII" },
+                { 1007, "MMVII" },
+                { 2107, "MMMMCVII" },
             };
             foreach (var testCase in testCases)
             {
@@ -108,6 +114,25 @@ namespace Tests
             { "MDCC"         , 1700 },
             { "DDDIV"         , 1504 },
             { "MMMM"         , 4000 },
+            { "-MMMM"         , -4000 },
+            { "-MMM"         , -3000 },
+            { "MMM"         , 3000 },
+            { "MMMMI"         , 4001 },
+            { "-MMMMI"         , -4001 },
+            { "-MMMI"         , -3001 },
+            { "MMMI"         , 3001 },
+            { "MMMMV"         , 4005 },
+            { "-MMMMV"         , -4005 },
+            { "-MMMV"         , -3005 },
+            { "MMMV"         , 3005 },
+            { "MMMMX"         , 4010 },
+            { "-MMMMX"         , -4010 },
+            { "-MMMX"         , -3010 },
+            { "MMMX"         , 3010 },
+            { "MMMMXV"         , 4015 },
+            { "-MMMMXV"         , -4015 },
+            { "-MMMXV"         , -3015 },
+            { "MMMXV"         , 3015 },
         };
 
         [TestMethod]
