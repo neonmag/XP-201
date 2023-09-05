@@ -1,9 +1,28 @@
 using App; // додати залежність (Dependency) від проєкту App
+using NuGet.Frameworks;
+
 namespace Tests
 {
     [TestClass]
     public class UnitTestApp
     {
+        [TestMethod]
+        public void TestToString()
+        {
+            Dictionary<int, String> testCases = new()
+            {
+                { 1, "I" },
+                { 2, "II" },
+                { 3, "III" },
+                { 4, "IV" },
+                { 5, "V" },
+                { 10, "X" },
+            };
+            foreach (var testCase in testCases)
+            {
+                Assert.AreEqual(testCase.Value, new RomanNumber(testCase.Key).ToString());
+            }
+        }
         private static Dictionary<String, int> parseTests = new()
         {
             { "I"          , 1    },
@@ -77,6 +96,11 @@ namespace Tests
             {"CCCCC"       ,500 },
             {"IVIVIVIVIV"  ,20 },
             {"CDIV"        ,404},
+            {"CDIV\t"        ,404},
+            {"CDIV\n"        ,404},
+            {"CDIV "        ,404},
+            {" CDIV "        ,404},
+            {"\tCDIV\n"        ,404},
             { "CCCC"         , 400 },
             { "LM"         , 950 },
             { "CDX"         , 410 },
@@ -87,7 +111,7 @@ namespace Tests
         };
 
         [TestMethod]
-        public void TestRomanNumberParse()
+        public void TestRomanNumberParseValid()
         {
             /*Assert.AreEqual(            // RomanNumber.Parse("I").Value == 1
                 1,                      // Значення, що очікується (що має бути, правильний варіант)
@@ -122,8 +146,71 @@ namespace Tests
             }
 
         }
+
+        [TestMethod]
+        public void TestRomanNumberParseNonValid()
+        {
+            // Тестування з неправильними формами чисел
+            Assert.ThrowsException<ArgumentException>(
+            () => RomanNumber.Parse(""),
+            "'' -> Exception");
+            Assert.ThrowsException<ArgumentException>(
+            () => RomanNumber.Parse(null!),
+            "null -> Exception");
+            // Саме виключення, що виникло у лямбді, повертається як рез-т
+            var ex = Assert.ThrowsException<ArgumentException>(
+            () => RomanNumber.Parse("XBC"),
+            "ABC -> Exception");
+            Assert.IsTrue(ex.Message.Contains('B'), "ex.Message.Contains 'B' ");
+            ex = Assert.ThrowsException<ArgumentException>(
+                () => RomanNumber.Parse("ABC"),
+                "'' -> Exception");
+            Assert.IsTrue(ex.Message.Contains('A') || ex.Message.Contains('B'),
+                "'ABC' ex.Message should contain either 'A' or 'B'");
+            // вимагаємо, щоб відомості про неправильну цифру ("В") було
+            // включено у повідомлені виключення
+            Assert.IsFalse(
+                   ex.Message.Length < 15, 
+                   "ex.Message.Length min 15"
+                   );
+            Dictionary<String, char> testCases = new()
+            {
+                { "Xx", 'x' },
+                { "Xy", 'y' },
+                { "AX", 'A' },
+                { "X C", ' ' },
+                { "X\tC", '\t' },
+                { "X\nC", '\n' },
+            };
+            foreach (var pair in testCases)
+            {
+                // Виключаємо змінну ex, робимо вкладені вирази
+                Assert.IsTrue(Assert.ThrowsException<ArgumentException>(
+                () => RomanNumber.Parse(pair.Key),
+                $"'{pair.Key}' -> ArgumentException").Message.Contains($"'{pair.Value}'"),
+                $"'{pair.Key}' ex.Message sould contains '{pair.Value}'");
+            }
+        }
     }
 }
+/* Тестування виключень
+ * У системі тестування виключення - провали тесту.
+ * Тому вирази, що мають завершуватись виключеннями, оточують 
+ * функціональними виразами (лямбдами). Це дозволяє перенести
+ * появу виключення у середину тестового методу, де воно буде 
+ * оброблене належним чином.
+ * Особливості: 
+ * - перевіряється суворий збіг типів виключень, більш загальний
+ *      тип не зараховується як проходження тесту
+ * - тест повертає викинуте виключення, це дозволяє накласти
+ *      умови на повідомлення, причину, тощо
+ *      
+ *      
+ * Слухання?
+ * які з комбінацій вважати правильними, які ні
+ * 'X C', 'XC', 'XC ', 'XC\t', '\nXC', 'XC\n', 'X\nC'
+ *   x      v     v       v        v       v       x
+ */
 /* Основу модульних тестів складають твердження (Asserts).
  * У твердженні фігурують два значення: те, що очікується, та
  * те, що одержується.

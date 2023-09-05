@@ -9,13 +9,35 @@ namespace App
     public class RomanNumber
     {
         public int Value { get; set; }
+        public RomanNumber(int value = 0)
+        {
+            Value = value;
+        }
+
+        public override string ToString()
+        {
+            // Відобразити значення Value у формі римського числа
+            // в оптимальній формі
+            Char result = Value switch
+            {
+                   1    =>  'I',
+                   5    =>  'V',
+                   10   =>  'X',
+                   50   =>  'L',
+                   100  =>  'C',
+                   500  =>  'D',
+                   1000 =>  'M'
+            };
+            return result.ToString();
+        }
         public static RomanNumber Parse(String input)
         {
             if (String.IsNullOrEmpty(input))
             {
-                throw new ArgumentNullException("Null or empty input");
+                throw new ArgumentException("Null or empty input");
             }
             if (input == "N") return new();
+            input = input.Trim(); // видалення початкових та кінцевих пробільних символів
             int lastDigitIndex = input[0] == '-' ? 1 : 0;
             int prev = 0;
             int current;
@@ -31,6 +53,7 @@ namespace App
                     'C' => 100,
                     'D' => 500,
                     'M' => 1000,
+                    _ => throw new ArgumentException($"Invalid Roman digit: '{input[i]}'"),
                 };
                 result += prev > current ? -current : current;
                 prev = current;
@@ -56,6 +79,7 @@ namespace App
              * і далі порівнюємо з наступною цифрою.
              */
         }
+
     }
 }
 
