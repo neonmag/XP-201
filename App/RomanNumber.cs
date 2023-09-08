@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Threading.Tasks.Sources;
 
 namespace App
 {
@@ -16,19 +17,37 @@ namespace App
 
         public override string ToString()
         {
-            // Відобразити значення Value у формі римського числа
-            // в оптимальній формі
-            Char result = Value switch
+            // Відобразити у оптимальному виді
+            Dictionary<int, string> parts = new()
             {
-                   1    =>  'I',
-                   5    =>  'V',
-                   10   =>  'X',
-                   50   =>  'L',
-                   100  =>  'C',
-                   500  =>  'D',
-                   1000 =>  'M'
+                { 1000, "M" },
+                { 900, "CM" },
+                { 500, "D" },
+                { 400, "CD" },
+                { 100, "C" },
+                { 90, "XC" },
+                { 50, "L" },
+                { 40, "XL" },
+                { 10, "X" },
+                { 9, "IX" },
+                { 5, "V" },
+                { 4, "IV" },
+                { 1, "I" }
             };
-            return result.ToString();
+            if (Value == 0) return "N";
+            bool isNegative = Value < 0;
+            var number = isNegative ? -Value : Value;
+            StringBuilder sb = new();
+            if (isNegative) sb.Append("-");
+            foreach (var part in parts)
+            {
+                while (number >= part.Key)
+                {
+                    sb.Append(part.Value);
+                    number -= part.Key;
+                }
+            }
+            return sb.ToString();
         }
         public static RomanNumber Parse(String input)
         {
