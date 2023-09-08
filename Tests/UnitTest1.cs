@@ -357,9 +357,13 @@ namespace Tests
         [TestMethod]
         public void TestRomanNumberParseIllegal()
         {
-            Assert.ThrowsException<ArgumentException>(
-             () => RomanNumber.Parse("IIX"),
-             "IIX -> Exception");
+            String[] illegals = { "IIV", "IIX", "VVX", "IVX", "IIIX", "VIX" };
+            foreach (var pair in illegals)
+            {
+                Assert.ThrowsException<ArgumentException>(
+                 () => RomanNumber.Parse(pair),
+                 $"{pair} -> Exception");
+            }
         }
     }
 }

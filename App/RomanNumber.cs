@@ -49,17 +49,53 @@ namespace App
             }
             return sb.ToString();
         }
+        private static int DigitValue(char digit)
+        {
+            return digit switch
+            {
+                'I' => 1,
+                'V' => 5,
+                'X' => 10,
+                'L' => 50,
+                'C' => 100,
+                'D' => 500,
+                'M' => 1000,
+                _ => throw new ArgumentException($"Invalid Roman didgit: '{digit}'")
+            };
+        }
         public static RomanNumber Parse(String input)
         {
+
+            input = input?.Trim()!; // видалення початкових та кінцевих пробільних символів
+
             if (String.IsNullOrEmpty(input))
             {
                 throw new ArgumentException("Null or empty input");
             }
-            if (input == "N") return new();
 
-            if (input == "IIX") throw new ArgumentException("");
-            input = input.Trim(); // видалення початкових та кінцевих пробільних символів
+            if (input == "N") return new();
             int lastDigitIndex = input[0] == '-' ? 1 : 0;
+
+            int maxDigit = 0;
+            int lessDigitsCount = 0;
+            for (int i = input.Length - 1; i >= lastDigitIndex; i--)
+            {
+                int digitValue = DigitValue(input[i]);
+                if (digitValue < maxDigit)
+                {
+                    lessDigitsCount++;
+                    if (lessDigitsCount > 1)
+                    {
+                        throw new ArgumentException(input);
+                    }
+                }
+                else
+                {
+                    maxDigit = digitValue;
+                    lessDigitsCount = 0;
+                }
+            }
+
             int prev = 0;
             int current;
             int result = 0;
