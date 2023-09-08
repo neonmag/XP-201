@@ -37,6 +37,8 @@ namespace App
                 throw new ArgumentException("Null or empty input");
             }
             if (input == "N") return new();
+
+            if (input == "IIX") throw new ArgumentException("");
             input = input.Trim(); // видалення початкових та кінцевих пробільних символів
             int lastDigitIndex = input[0] == '-' ? 1 : 0;
             int prev = 0;

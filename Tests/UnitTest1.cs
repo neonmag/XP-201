@@ -182,6 +182,9 @@ namespace Tests
             Assert.ThrowsException<ArgumentException>(
             () => RomanNumber.Parse(null!),
             "null -> Exception");
+            Assert.ThrowsException<ArgumentException>(
+            () => RomanNumber.Parse("   "),
+            "\"    \"    -> Exception");
             // Саме виключення, що виникло у лямбді, повертається як рез-т
             var ex = Assert.ThrowsException<ArgumentException>(
             () => RomanNumber.Parse("XBC"),
@@ -195,7 +198,7 @@ namespace Tests
             // вимагаємо, щоб відомості про неправильну цифру ("В") було
             // включено у повідомлені виключення
             Assert.IsFalse(
-                   ex.Message.Length < 15, 
+                   ex.Message.Length < 15,
                    "ex.Message.Length min 15"
                    );
             Dictionary<String, char> testCases = new()
@@ -215,6 +218,14 @@ namespace Tests
                 $"'{pair.Key}' -> ArgumentException").Message.Contains($"'{pair.Value}'"),
                 $"'{pair.Key}' ex.Message sould contains '{pair.Value}'");
             }
+        }
+
+        [TestMethod]
+        public void TestRomanNumberParseIllegal()
+        {
+            Assert.ThrowsException<ArgumentException>(
+             () => RomanNumber.Parse("IIX"),
+             "IIX -> Exception");
         }
     }
 }
