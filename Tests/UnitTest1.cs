@@ -160,6 +160,12 @@ namespace Tests
             {
                 Assert.AreEqual(testCase.Value, new RomanNumber(testCase.Key).ToString(), $"{testCase.Key}.ToString() == '{testCase.Value}'");
             }
+            Random r = new Random();
+            for (int i = 0; i < 256; i++)
+            {
+                int number = r.Next(-3000, 3001);
+                Assert.AreEqual(number, RomanNumber.Parse(new RomanNumber(number).ToString()).Value, $"{number}.ToString == {new RomanNumber(number).ToString()}");
+            }
             // Тест без аргументу
             Assert.AreEqual("N", new RomanNumber().ToString(), $"new RomanNumber() = 'N'");
         }

@@ -22,6 +22,7 @@ namespace App
             {
                 { 1000, "M" },
                 { 900, "CM" },
+                { 600, "DC" },
                 { 500, "D" },
                 { 400, "CD" },
                 { 100, "C" },
@@ -30,6 +31,7 @@ namespace App
                 { 40, "XL" },
                 { 10, "X" },
                 { 9, "IX" },
+                { 6, "VI" },
                 { 5, "V" },
                 { 4, "IV" },
                 { 1, "I" }
@@ -60,7 +62,7 @@ namespace App
                 'C' => 100,
                 'D' => 500,
                 'M' => 1000,
-                _ => throw new ArgumentException($"Invalid Roman didgit: '{digit}'")
+                _ => throw new ArgumentException($"Invalid Roman didgit in digit: '{digit}'")
             };
         }
         public static RomanNumber Parse(String input)
@@ -110,7 +112,7 @@ namespace App
                     'C' => 100,
                     'D' => 500,
                     'M' => 1000,
-                    _ => throw new ArgumentException($"Invalid Roman digit: '{input[i]}'"),
+                    _ => throw new ArgumentException($"Invalid Roman digit in parse: '{input[i]}'"),
                 };
                 result += prev > current ? -current : current;
                 prev = current;
