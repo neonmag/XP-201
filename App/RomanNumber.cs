@@ -76,44 +76,33 @@ namespace App
             }
 
             if (input == "N") return new();
-            int lastDigitIndex = input[0] == '-' ? 1 : 0;
 
+            int lastDigitIndex = input[0] == '-' ? 1 : 0;
             int maxDigit = 0;
             int lessDigitsCount = 0;
+
             for (int i = input.Length - 1; i >= lastDigitIndex; i--)
             {
                 int digitValue = DigitValue(input[i]);
-                if (digitValue < maxDigit)
-                {
-                    lessDigitsCount++;
-                    if (lessDigitsCount > 1)
-                    {
-                        throw new ArgumentException(input);
-                    }
-                }
-                else
-                {
-                    maxDigit = digitValue;
-                    lessDigitsCount = 0;
-                }
+
+                if (digitValue < maxDigit && ++lessDigitsCount > 1)
+                    throw new ArgumentException(input);
+
+                maxDigit = digitValue > maxDigit ? digitValue : maxDigit;
+                lessDigitsCount = digitValue < maxDigit ? 1 : 0;
             }
 
             int prev = 0;
-            int current;
             int result = 0;
+
             for (int i = input.Length - 1; i >= lastDigitIndex; i--)
             {
-                current = input[i] switch
-                {
-                    'I' => 1,
-                    'V' => 5,
-                    'X' => 10,
-                    'L' => 50,
-                    'C' => 100,
-                    'D' => 500,
-                    'M' => 1000,
-                    _ => throw new ArgumentException($"Invalid Roman digit in parse: '{input[i]}'"),
-                };
+                char c = input[i];
+                int current = DigitValue(c);
+
+                if (current == 0)
+                    throw new ArgumentException($"Invalid Roman digit in parse: '{c}'");
+
                 result += prev > current ? -current : current;
                 prev = current;
             }
