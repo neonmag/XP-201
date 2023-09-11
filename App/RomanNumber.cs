@@ -55,6 +55,7 @@ namespace App
         {
             return digit switch
             {
+                'N' => 0,
                 'I' => 1,
                 'V' => 5,
                 'X' => 10,
@@ -65,47 +66,75 @@ namespace App
                 _ => throw new ArgumentException($"Invalid Roman didgit in digit: '{digit}'")
             };
         }
-        public static RomanNumber Parse(String input)
+
+        private static void CheckLegalityOrThrow(String input)
         {
-
-            input = input?.Trim()!; // видалення початкових та кінцевих пробільних символів
-
-            if (String.IsNullOrEmpty(input))
-            {
-                throw new ArgumentException("Null or empty input");
-            }
-
-            if (input == "N") return new();
-
-            int lastDigitIndex = input[0] == '-' ? 1 : 0;
             int maxDigit = 0;
             int lessDigitsCount = 0;
+            int lastDigitIndex = input.StartsWith('-') ? 1 : 0;
+            int digitValue = 0;
 
             for (int i = input.Length - 1; i >= lastDigitIndex; i--)
             {
-                int digitValue = DigitValue(input[i]);
-
+                digitValue = DigitValue(input[i]);
                 if (digitValue < maxDigit && ++lessDigitsCount > 1)
                     throw new ArgumentException(input);
 
                 maxDigit = digitValue > maxDigit ? digitValue : maxDigit;
                 lessDigitsCount = digitValue < maxDigit ? 1 : 0;
             }
+        }
+
+        private static void CheckValidityOrThrow(String input)
+        {
+            if (String.IsNullOrEmpty(input))
+            {
+                throw new ArgumentException("Null or empty input");
+            }
+            if (input.StartsWith('-'))
+                input = input[1..];
+            List<char> invalidChars = new();
+            foreach (char c in input)
+            {
+                try { DigitValue(c); }
+                catch { invalidChars.Add(c); }
+            }
+            if (invalidChars.Count > 0)
+            {
+                String chars = String.Join(", ", invalidChars.Select(
+                    c => $"'{c}'"));
+                throw new ArgumentException($"Invalid Roman didgit in digits: {chars}");
+            }
+        }
+
+        public static RomanNumber Parse(String input)
+        {
+
+            input = input?.Trim()!; // видалення початкових та кінцевих пробільних символів
+
+            CheckValidityOrThrow(input);
+            CheckLegalityOrThrow(input);
+            if (input == "N") return new();
+
+            int lastDigitIndex = input[0] == '-' ? 1 : 0;
 
             int prev = 0;
             int result = 0;
+            int current = 0;
+
 
             for (int i = input.Length - 1; i >= lastDigitIndex; i--)
             {
-                char c = input[i];
-                int current = DigitValue(c);
 
-                if (current == 0)
-                    throw new ArgumentException($"Invalid Roman digit in parse: '{c}'");
-
+                //if (current == 0)
+                //    throw new ArgumentException($"Invalid Roman digit in parse: '{input[i]}'");
+                current = DigitValue(input[i]);
                 result += prev > current ? -current : current;
                 prev = current;
             }
+
+
+
             return new()
             {
                 Value = result * (1 - 2 * lastDigitIndex)

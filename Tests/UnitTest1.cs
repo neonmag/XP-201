@@ -333,8 +333,8 @@ namespace Tests
             ex = Assert.ThrowsException<ArgumentException>(
                 () => RomanNumber.Parse("ABC"),
                 "'' -> Exception");
-            Assert.IsTrue(ex.Message.Contains('A') || ex.Message.Contains('B'),
-                "'ABC' ex.Message should contain either 'A' or 'B'");
+            Assert.IsTrue(ex.Message.Contains('A') && ex.Message.Contains('B'),
+                "'ABC' ex.Message should contain either 'A' and 'B'");
             // вимагаємо, щоб відомості про неправильну цифру ("В") було
             // включено у повідомлені виключення
             Assert.IsFalse(
@@ -353,10 +353,11 @@ namespace Tests
             foreach (var pair in testCases)
             {
                 // Виключаємо змінну ex, робимо вкладені вирази
-                Assert.IsTrue(Assert.ThrowsException<ArgumentException>(
+                ex = Assert.ThrowsException<ArgumentException>(
                 () => RomanNumber.Parse(pair.Key),
-                $"'{pair.Key}' -> ArgumentException").Message.Contains($"'{pair.Value}'"),
-                $"'{pair.Key}' ex.Message sould contains '{pair.Value}'");
+                $"'{pair.Key}' -> ArgumentException");
+                Assert.IsTrue(ex.Message.Contains($"'{pair.Value}'"),
+                $"'{pair.Key}' ex.Message({ex.Message}) sould contains '{pair.Value}'");
             }
         }
 
