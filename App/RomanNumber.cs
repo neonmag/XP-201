@@ -72,7 +72,7 @@ namespace App
                 'C' => 100,
                 'D' => 500,
                 'M' => 1000,
-                _ => throw new ArgumentException($"{INVALID_ROMAN_DIGIT}{digit}{QUOTE_DIGIT}")
+                _ => throw new ArgumentException($"{INVALID_ROMAN_DIGIT}{digit}")
             } ;
         }
 
@@ -80,7 +80,7 @@ namespace App
         {
             int maxDigit = 0;
             int lessDigitsCount = 0;
-            int lastDigitIndex = input.StartsWith(MINUS_DIGIT) ? 1 : 0;
+            int lastDigitIndex = input.StartsWith('-') ? 1 : 0;
             int digitValue = 0;
 
             for (int i = input.Length - 1; i >= lastDigitIndex; i--)
@@ -98,9 +98,9 @@ namespace App
         {
             if (String.IsNullOrEmpty(input))
             {
-                throw new ArgumentException(EMPTY_INPUT_MESSAGE);
+                throw new ArgumentException("Null or empty input");
             }
-            if (input.StartsWith(MINUS_DIGIT))
+            if (input.StartsWith('-'))
                 input = input[1..];
             List<char> invalidChars = new();
             foreach (char c in input)
@@ -110,16 +110,17 @@ namespace App
             }
             if (invalidChars.Count > 0)
             {
-                String chars = String.Join(DIGITS_SEPARATOR, invalidChars.Select(
-                    c => $"'{QUOTE_DIGIT}{c}{QUOTE_DIGIT}'"));
+                String chars = String.Join(", ", invalidChars.Select(
+                    c => $"'{c}'"));
                 throw new ArgumentException($"Invalid Roman didgit in digits: {chars}");
             }
         }
+
         public RomanNumber Add(RomanNumber other)
         {
-            if (other is null)
-                throw new ArgumentNullException(String.Format(NULL_MESSAGE_PATTERN, ADD_NULL_MESSAGE, nameof(other)));
-            return new (this.Value + other.Value );
+            if (other == null)
+                throw new ArgumentException($"Cannot Add null object: {nameof(other)}");
+            return new() { Value = Value + other.Value };
         }
         public static RomanNumber Parse(String input)
         {

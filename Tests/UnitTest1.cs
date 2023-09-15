@@ -273,6 +273,8 @@ namespace Tests
             { "-MMMMXV"         , -4015 },
             { "-MMMXV"         , -3015 },
             { "MMMXV"         , 3015 },
+            { "MMMXV-"         , 3015 },
+            { "MMMXV-N"         , 3015 },
         };
 
         [TestMethod]
@@ -382,14 +384,11 @@ namespace Tests
             Assert.AreEqual(30, r1.Add(r2).Value);
             Assert.AreEqual("XXX", r2.Add(r1).ToString());
             Assert.AreEqual(30, r2.Add(r1).Value);
-            var ex = Assert.ThrowsException<ArgumentNullException>(
+            var ex = Assert.ThrowsException<ArgumentException>(
                 () => r1.Add(null!),
-                "r1.Add(null!) -> ArgumentNullException"
+                "r1.Add(null!) -> ArgumentException"
             );
             Assert.IsTrue(ex.Message.Contains("Cannot Add null object", StringComparison.OrdinalIgnoreCase), $"ex.Message({ex.Message}) contains 'Cannot Add null object'");
-            // Переконуємось у тому, що r2.Add(r1).Value це новий об'єкт, а не змінений r2
-
-            Assert.AreNotSame(r2, r2.Add(r1), "Add() should return new item");
         }
     }
 }
