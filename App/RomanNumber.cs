@@ -4,10 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Threading.Tasks.Sources;
-
 namespace App
 {
-    public class RomanNumber
+    public record RomanNumber
     {
         private const char ZERO_DIGIT = 'N';
         private const char MINUS_DIGIT = '-';
@@ -15,6 +14,7 @@ namespace App
         private const String INVALID_ROMAN_DIGIT = "Invalid Roman digits(s):";
         private const String EMPTY_INPUT_MESSAGE = "Null or empty input";
         private const String DIGITS_SEPARATOR = ", ";
+        private const String SUM_NULL_MESSAGE = "Invalid Sum() invocation with NULL argument";
         private const String ADD_NULL_MESSAGE = "Cannot Add null object";
         private const String NULL_MESSAGE_PATTERN = "{0}: '{1}'";
 
@@ -64,7 +64,7 @@ namespace App
         {
             return digit switch
             {
-                ZERO_DIGIT => 0,
+                'N' => 0,
                 'I' => 1,
                 'V' => 5,
                 'X' => 10,
@@ -116,7 +116,25 @@ namespace App
             }
         }
 
-        public RomanNumber Add(RomanNumber other)
+        public static RomanNumber Sum(params RomanNumber[] arr_r)
+        {
+            if (arr_r is null)
+            {
+                throw new ArgumentNullException(
+                    String.Format(
+                        NULL_MESSAGE_PATTERN,
+                        SUM_NULL_MESSAGE,
+                        nameof(arr_r)));
+            }
+            int res = 0;
+            foreach (var r in arr_r)
+            {
+                res += r.Value;
+            }
+            return new(res);
+        }
+
+            public RomanNumber Add(RomanNumber other)
         {
             if (other == null)
                 throw new ArgumentException($"Cannot Add null object: {nameof(other)}");
