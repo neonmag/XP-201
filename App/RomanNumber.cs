@@ -161,6 +161,20 @@ namespace App
                 throw new ArgumentException("Invalid expression. Use the format 'RomanNumber + RomanNumber' or 'RomanNumber - RomanNumber'.");
             }
 
+            int amountOfMinus = 0;
+
+            foreach (var ch in input)
+                {
+                if(ch == '-')
+                {
+                    amountOfMinus++;
+                }
+            }
+            if(amountOfMinus > 1)
+            {
+                throw new ArgumentException(input.Substring(0, amountOfMinus));
+            }
+
             string operand1 = parts[0].Trim();
             string operand2 = parts[1].Trim();
 
@@ -179,8 +193,17 @@ namespace App
             }
             else
             {
-                result = RomanNumber.Parse(operand1).Subtract(RomanNumber.Parse(operand2));
+                if (input.StartsWith('-'))
+                {
+                    result = new RomanNumber((RomanNumber.Parse(operand1).Value * -1)).Subtract(RomanNumber.Parse(operand2));
+
+                }
+                else
+                {
+                    result = RomanNumber.Parse(operand1).Subtract(RomanNumber.Parse(operand2));
+                }
             }
+
 
             return result;
         }

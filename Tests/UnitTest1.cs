@@ -496,13 +496,13 @@ namespace Tests
 
             for (int i = 0; i < 100; i++)
             {
-                int value1 = random.Next(1, 3000);
-                int value2 = random.Next(1, 3000);
+                int value1 = random.Next(-3000, 3000);
+                int value2 = random.Next(-3000, 3000);
 
                 RomanNumber roman1 = new RomanNumber(value1);
                 RomanNumber roman2 = new RomanNumber(value2);
 
-                Assert.AreEqual(roman1.Value - roman2.Value, RomanNumber.Eval($"{roman1} - {roman2}").Value);
+                Assert.AreEqual(roman1.Value - roman2.Value, RomanNumber.Eval($"{RomanNumber.Parse(roman1.ToString())} - {RomanNumber.Parse(roman2.ToString())}"));
             }
         }
 
@@ -513,15 +513,13 @@ namespace Tests
 
             for (int i = 0; i < 100; i++)
             {
-                int value1 = random.Next(1, 3000);
-                int value2 = random.Next(1, 3000);
+                int value1 = random.Next(-3000, 3000);
+                int value2 = random.Next(-3000, 3000);
 
                 RomanNumber roman1 = new RomanNumber(value1);
                 RomanNumber roman2 = new RomanNumber(value2);
 
-                RomanNumber subtractResult = roman1.Subtract(roman2);
-
-                Assert.AreEqual(value1 - value2, subtractResult.Value);
+                Assert.AreEqual(RomanNumber.Sum(roman1, roman2), RomanNumber.Eval($"{RomanNumber.Parse(roman1.ToString())} + {RomanNumber.Parse(roman2.ToString())}"));
             }
         }
 
@@ -532,22 +530,45 @@ namespace Tests
 
             for (int i = 0; i < 100; i++)
             {
-                int value1 = random.Next(1, 3000);
-                int value2 = random.Next(1, 3000);
+                int value1 = random.Next(-3000, 3000);
+                int value2 = random.Next(-3000, 3000);
 
                 RomanNumber roman1 = new RomanNumber(value1);
                 RomanNumber roman2 = new RomanNumber(value2);
 
-                RomanNumber sumResult = RomanNumber.Sum(roman1, roman2);
-                RomanNumber subtractResult = roman1.Subtract(roman2);
-
-                Assert.AreEqual(roman1.Value - roman2.Value, subtractResult.Value);
+                Assert.AreEqual(roman1.Value + roman2.Value, RomanNumber.Sum(roman1, roman2));
             }
         }
+        [TestMethod]
+        public void TestEvalInvalidNumbers()
+        {
+            Dictionary<String, int> illegalCases = new()
+            {
+                {"IIC + II" , 42},
+                { "X + X + X" , 42},
+                { "X    +    X    +    X" , 42},
+                { "+X + X" , 20},
+                { "X + +X" , 20},
+                { "-X +- X",20 },
+                { "+X", 10 }
+            };
+            foreach (var illegalCase in illegalCases) {
+                Assert.ThrowsException<ArgumentException>(
+                () => RomanNumber.Parse(illegalCase.Key),
+                $"{illegalCase.Key} -> Eval");
+            }
 
-
+        }
     }
 }
+
+/*
+ * IIC + II -> Invalid Number 'IIC'
+ * AX + II -> Invalid Number 'AX'
+ * X + X + X -> Too many arguments
+ * +X + X -> Invalid Expression
+ * X + +x -> Invalid Expresiion
+ */
 /* Тестування виключень
  * У системі тестування виключення - провали тесту.
  * Тому вирази, що мають завершуватись виключеннями, оточують 
