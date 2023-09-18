@@ -173,7 +173,6 @@ namespace App
 
             RomanNumber result;
 
-
             if (op == '+')
             {
                 result = RomanNumber.Parse(operand1).Add(RomanNumber.Parse(operand2));
