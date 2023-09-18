@@ -443,6 +443,119 @@ namespace Tests
                 );
             }
         }
+        [TestMethod]
+        public void TestEvalAddition()
+        {
+            RomanNumber result = RomanNumber.Eval("IV + XL");
+            Assert.AreEqual("XLIV", result.ToString());
+        }
+
+        [TestMethod]
+        public void TestEvalSubtraction()
+        {
+            RomanNumber result = RomanNumber.Eval("X - IV");
+            Assert.AreEqual("VI", result.ToString());
+        }
+
+        [TestMethod]
+        public void TestEvalInvalidExpression()
+        {
+            Assert.ThrowsException<ArgumentException>(() => RomanNumber.Eval("Invalid Expression"));
+        }
+
+
+        [TestMethod]
+        public void TestRomanNumberSubtractNotNull()
+        {
+            RomanNumber roman1 = new RomanNumber(10);
+            RomanNumber roman2 = new RomanNumber(5);
+
+            RomanNumber result = roman1.Subtract(roman2);
+
+            Assert.IsNotNull(result);
+        }
+
+        [TestMethod]
+        public void TestRomanNumberSubtractType()
+        {
+            RomanNumber roman1 = new RomanNumber(10);
+            RomanNumber roman2 = new RomanNumber(5);
+
+            RomanNumber result = roman1.Subtract(roman2);
+
+            Assert.IsInstanceOfType(result, typeof(RomanNumber));
+        }
+
+        [TestMethod]
+        public void TestRomanNumberSubtractWithKnownResults()
+        {
+            RomanNumber roman1 = new RomanNumber(10);
+            RomanNumber roman2 = new RomanNumber(5);
+
+            RomanNumber result = roman1.Subtract(roman2);
+
+            Assert.AreEqual("V", result.ToString());
+        }
+
+        [TestMethod]
+        public void TestRomanNumberSubtractWithRandomNumbers()
+        {
+            Random random = new Random();
+
+            for (int i = 0; i < 100; i++)
+            {
+                int value1 = random.Next(1, 3000);
+                int value2 = random.Next(1, 3000);
+
+                RomanNumber roman1 = new RomanNumber(value1);
+                RomanNumber roman2 = new RomanNumber(value2);
+
+                RomanNumber subtractResult = roman1.Subtract(roman2);
+
+                Assert.AreEqual(roman1.Value - roman2.Value, subtractResult.Value);
+            }
+        }
+
+        [TestMethod]
+        public void TestRomanNumberSubtractCrossAdd()
+        {
+            Random random = new Random();
+
+            for (int i = 0; i < 100; i++)
+            {
+                int value1 = random.Next(1, 3000);
+                int value2 = random.Next(1, 3000);
+
+                RomanNumber roman1 = new RomanNumber(value1);
+                RomanNumber roman2 = new RomanNumber(value2);
+
+                RomanNumber subtractResult = roman1.Subtract(roman2);
+
+                Assert.AreEqual(value1 - value2, subtractResult.Value);
+            }
+        }
+
+        [TestMethod]
+        public void TestRomanNumberSubtractCrossSum()
+        {
+            Random random = new Random();
+
+            for (int i = 0; i < 100; i++)
+            {
+                int value1 = random.Next(1, 3000);
+                int value2 = random.Next(1, 3000);
+
+                RomanNumber roman1 = new RomanNumber(value1);
+                RomanNumber roman2 = new RomanNumber(value2);
+
+                RomanNumber sumResult = RomanNumber.Sum(roman1, roman2);
+                RomanNumber subtractResult = roman1.Subtract(roman2);
+
+                Assert.AreEqual(roman1.Value - roman2.Value, subtractResult.Value);
+            }
+        }
+
+
     }
 }
 /* Тестування виключень
