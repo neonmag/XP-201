@@ -195,7 +195,7 @@ namespace App
             {
                 if (input.StartsWith('-'))
                 {
-                    result = new RomanNumber((RomanNumber.Parse(operand1).Value * -1)).Subtract(RomanNumber.Parse(operand2));
+                    result = new RomanNumber((RomanNumber.Parse(operand1).Value)).Subtract(RomanNumber.Parse(operand2));
 
                 }
                 else

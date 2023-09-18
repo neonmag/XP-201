@@ -502,7 +502,7 @@ namespace Tests
                 RomanNumber roman1 = new RomanNumber(value1);
                 RomanNumber roman2 = new RomanNumber(value2);
 
-                Assert.AreEqual(roman1.Value - roman2.Value, RomanNumber.Eval($"{RomanNumber.Parse(roman1.ToString())} - {RomanNumber.Parse(roman2.ToString())}"));
+                Assert.AreEqual(new RomanNumber(roman1.Value - roman2.Value), RomanNumber.Eval($"{RomanNumber.Parse(roman1.ToString())} - {RomanNumber.Parse(roman2.ToString())}"));
             }
         }
 
@@ -519,7 +519,7 @@ namespace Tests
                 RomanNumber roman1 = new RomanNumber(value1);
                 RomanNumber roman2 = new RomanNumber(value2);
 
-                Assert.AreEqual(RomanNumber.Sum(roman1, roman2), RomanNumber.Eval($"{RomanNumber.Parse(roman1.ToString())} + {RomanNumber.Parse(roman2.ToString())}"));
+                Assert.AreEqual(roman1.Add(roman2), RomanNumber.Eval($"{roman1.ToString()} + {roman2.ToString()}"));
             }
         }
 
@@ -536,7 +536,7 @@ namespace Tests
                 RomanNumber roman1 = new RomanNumber(value1);
                 RomanNumber roman2 = new RomanNumber(value2);
 
-                Assert.AreEqual(roman1.Value + roman2.Value, RomanNumber.Sum(roman1, roman2));
+                Assert.AreEqual(roman1.Value + roman2.Value, RomanNumber.Sum(roman1, roman2).Value);
             }
         }
         [TestMethod]
