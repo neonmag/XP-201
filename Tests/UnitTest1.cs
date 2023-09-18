@@ -446,15 +446,13 @@ namespace Tests
         [TestMethod]
         public void TestEvalAddition()
         {
-            RomanNumber result = RomanNumber.Eval("IV + XL");
-            Assert.AreEqual("XLIV", result.ToString());
+            Assert.AreEqual("XLIV", RomanNumber.Eval("IV + XL").ToString());
         }
 
         [TestMethod]
         public void TestEvalSubtraction()
         {
-            RomanNumber result = RomanNumber.Eval("X - IV");
-            Assert.AreEqual("VI", result.ToString());
+            Assert.AreEqual("VI", RomanNumber.Eval("X - IV").ToString());
         }
 
         [TestMethod]
@@ -470,9 +468,7 @@ namespace Tests
             RomanNumber roman1 = new RomanNumber(10);
             RomanNumber roman2 = new RomanNumber(5);
 
-            RomanNumber result = roman1.Subtract(roman2);
-
-            Assert.IsNotNull(result);
+            Assert.IsNotNull(RomanNumber.Eval($"{roman1} - {roman2}"));
         }
 
         [TestMethod]
@@ -481,9 +477,7 @@ namespace Tests
             RomanNumber roman1 = new RomanNumber(10);
             RomanNumber roman2 = new RomanNumber(5);
 
-            RomanNumber result = roman1.Subtract(roman2);
-
-            Assert.IsInstanceOfType(result, typeof(RomanNumber));
+            Assert.IsInstanceOfType(RomanNumber.Eval($"{roman1} - {roman2}"), typeof(RomanNumber));
         }
 
         [TestMethod]
@@ -492,9 +486,7 @@ namespace Tests
             RomanNumber roman1 = new RomanNumber(10);
             RomanNumber roman2 = new RomanNumber(5);
 
-            RomanNumber result = roman1.Subtract(roman2);
-
-            Assert.AreEqual("V", result.ToString());
+            Assert.AreEqual(new RomanNumber(5), RomanNumber.Eval($"{roman1} - {roman2}"));
         }
 
         [TestMethod]
@@ -510,9 +502,7 @@ namespace Tests
                 RomanNumber roman1 = new RomanNumber(value1);
                 RomanNumber roman2 = new RomanNumber(value2);
 
-                RomanNumber subtractResult = roman1.Subtract(roman2);
-
-                Assert.AreEqual(roman1.Value - roman2.Value, subtractResult.Value);
+                Assert.AreEqual(roman1.Value - roman2.Value, RomanNumber.Eval($"{roman1} - {roman2}").Value);
             }
         }
 

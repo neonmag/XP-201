@@ -73,7 +73,7 @@ namespace App
                 'D' => 500,
                 'M' => 1000,
                 _ => throw new ArgumentException($"{INVALID_ROMAN_DIGIT}{digit}")
-            } ;
+            };
         }
 
         private static void CheckLegalityOrThrow(String input)
@@ -134,7 +134,7 @@ namespace App
             return new(res);
         }
 
-            public RomanNumber Add(RomanNumber other)
+        public RomanNumber Add(RomanNumber other)
         {
             if (other == null)
                 throw new ArgumentException($"Cannot Add null object: {nameof(other)}");
@@ -177,7 +177,7 @@ namespace App
             {
                 result = RomanNumber.Parse(operand1).Add(RomanNumber.Parse(operand2));
             }
-            else 
+            else
             {
                 result = RomanNumber.Parse(operand1).Subtract(RomanNumber.Parse(operand2));
             }
@@ -236,5 +236,4 @@ namespace App
 
     }
 }
-
 
